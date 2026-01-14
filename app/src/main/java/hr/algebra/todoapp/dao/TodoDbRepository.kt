@@ -13,12 +13,12 @@ private const val TABLE_NAME = "tasks"
 private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::_id.name} integer primary key autoincrement, " +
         "${Task::title.name} text not null, " +
-        "${Task::notes.name} text not null, " +
-        "${Task::dueDate.name} text not null, " +
-        "${Task::done.name} text not null, " +
-        "${Task::priority.name} integer not null" +
+        "${Task::notes.name} text, " +
+        "${Task::dueDate.name} text, " +
+        "${Task::done.name} integer not null default 0, " +
+        "${Task::priority.name} integer not null default 0 " +
         ")"
-private const val DROP_TABLE = "drop table $TABLE_NAME"
+private const val DROP_TABLE = "drop table if exists $TABLE_NAME"
 
 class TodoDbRepository(context: Context?) :
     SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION),
