@@ -1,4 +1,4 @@
-package hr.algebra.nasa
+package hr.algebra.todoapp
 
 import org.junit.Test
 

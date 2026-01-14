@@ -1,18 +1,14 @@
-package hr.algebra.nasa
+package hr.algebra.todoapp
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import hr.algebra.nasa.databinding.ActivityHostBinding
+import hr.algebra.todoapp.databinding.ActivityHostBinding
 
 class HostActivity : AppCompatActivity() {
 

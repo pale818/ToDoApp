@@ -1,10 +1,9 @@
-package hr.algebra.nasa.dao
+package hr.algebra.todoapp.dao
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.net.Uri
 
-interface NasaRepository {
+interface TodoRepository {
     fun delete(
         selection: String?,
         selectionArgs: Array<String>?

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "hr.algebra.nasa"
+    namespace = "hr.algebra.todoapp"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "hr.algebra.nasa"
+        applicationId = "hr.algebra.todoapp"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

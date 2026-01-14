@@ -1,28 +1,28 @@
-package hr.algebra.nasa.dao
+package hr.algebra.todoapp.dao
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import hr.algebra.nasa.model.Item
+import hr.algebra.todoapp.model.Task
 
-private const val DB_NAME = "items.db"
-private const val DB_VERSION = 1
-private const val TABLE_NAME = "items"
+private const val DB_NAME = "tasks.db"
+private const val DB_VERSION = 2
+private const val TABLE_NAME = "tasks"
 private val CREATE_TABLE = "create table $TABLE_NAME( " +
-        "${Item::_id.name} integer primary key autoincrement, " +
-        "${Item::title.name} text not null, " +
-        "${Item::explanation.name} text not null, " +
-        "${Item::picturePath.name} text not null, " +
-        "${Item::date.name} text not null, " +
-        "${Item::read.name} integer not null" +
+        "${Task::_id.name} integer primary key autoincrement, " +
+        "${Task::title.name} text not null, " +
+        "${Task::notes.name} text not null, " +
+        "${Task::dueDate.name} text not null, " +
+        "${Task::done.name} text not null, " +
+        "${Task::priority.name} integer not null" +
         ")"
 private const val DROP_TABLE = "drop table $TABLE_NAME"
 
-class NasaDbRepository(context: Context?) :
+class TodoDbRepository(context: Context?) :
     SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION),
-    NasaRepository {
+    TodoRepository {
 
     override fun delete(
         selection: String?,

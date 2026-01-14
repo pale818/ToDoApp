@@ -15,13 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nasa">
         <provider
-            android:name=".NasaProvider"
-            android:authorities="hr.algebra.nasa.api.provider"
+            android:name=".TodoProvider"
+            android:authorities="hr.algebra.todoapp.provider"
             android:enabled="true"
             android:exported="false" />
 
         <receiver
-            android:name=".NasaReceiver"
+            android:name=".TasksReceiver"
             android:enabled="true"
             android:exported="false" />
 

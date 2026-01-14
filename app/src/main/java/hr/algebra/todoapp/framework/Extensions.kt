@@ -1,4 +1,4 @@
-package hr.algebra.nasa.framework
+package hr.algebra.todoapp.framework
 
 import android.content.Context
 import android.net.ConnectivityManager

@@ -1,12 +1,11 @@
-package hr.algebra.nasa
+package hr.algebra.todoapp
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat.startActivity
-import hr.algebra.nasa.framework.setBooleanPreference
+import hr.algebra.todoapp.framework.setBooleanPreference
 
-class NasaReceiver : BroadcastReceiver() {
+class TasksReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         // FG

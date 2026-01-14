@@ -8,13 +8,13 @@
     <fragment
         tools:layout="@layout/fragment_items"
         android:id="@+id/menuItems"
-        android:label="@string/items"
-        android:name="hr.algebra.nasa.fragment.ItemsFragment" />
+        android:label="@string/tasks"
+        android:name="hr.algebra.todoapp.fragment.TasksFragments" />
 
     <fragment
         tools:layout="@layout/fragment_about"
         android:id="@+id/menuAbout"
         android:label="@string/about"
-        android:name="hr.algebra.nasa.fragment.AboutFragment" />
+        android:name="hr.algebra.todoapp.fragment.AboutFragment" />
 
 </navigation>

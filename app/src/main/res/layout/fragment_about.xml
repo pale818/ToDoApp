@@ -14,13 +14,12 @@
         android:layout_weight="1" />
 
     <TextView
-        android:gravity="top|center"
-        android:textSize="@dimen/_50sp"
-        android:text="@string/application_made_by_algebra_students"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1" />
-
+        android:layout_weight="1"
+        android:gravity="top|center"
+        android:text="@string/notification_app"
+        android:textSize="@dimen/_50sp" />
 
 
 </LinearLayout>
