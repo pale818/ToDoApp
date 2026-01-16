@@ -15,15 +15,10 @@ private const val AUTHORITY = "hr.algebra.todoapp.provider"
 private const val PATH = "tasks"
 val TODO_PROVIDER_CONTENT_URI: Uri = "content://$AUTHORITY/$PATH".toUri()
 
-//content://hr.algebra.todoapp.api.provider/items => ITEMS - ALL
-//content://hr.algebra.todoapp.api.provider/items/2 => SINGLE
-
 private const val TASKS = 10
 private const val TASK_ID = 20
-private val URI_MATCHER = with(UriMatcher(UriMatcher.NO_MATCH)){2
-    //content://hr.algebra.todoapp.api.provider/items => ITEMS - ALL
+private val URI_MATCHER = with(UriMatcher(UriMatcher.NO_MATCH)){
     addURI(AUTHORITY, PATH, TASKS)
-    //content://hr.algebra.todoapp.api.provider/items/2 => SINGLE
     addURI(AUTHORITY, "$PATH/#", TASK_ID)
     this
 }
@@ -32,15 +27,20 @@ class TodoProvider : ContentProvider() {
     private lateinit var repository: TodoRepository
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        when(URI_MATCHER.match(uri)) {
-            TASKS -> return repository.delete(selection, selectionArgs)
+        val count = when(URI_MATCHER.match(uri)) {
+            TASKS -> repository.delete(selection, selectionArgs)
             TASK_ID -> {
                 val id = uri.lastPathSegment
                 if(id != null)
-                    return repository.delete("${Task::_id.name}=?", arrayOf(id))
+                    repository.delete("${Task::_id.name}=?", arrayOf(id))
+                else 0
             }
+            else -> throw IllegalArgumentException("Wrong uri")
         }
-        throw IllegalArgumentException("Wrong uri")
+        if (count > 0) {
+            context?.contentResolver?.notifyChange(uri, null)
+        }
+        return count
     }
 
     override fun getType(uri: Uri): String? =
@@ -50,13 +50,11 @@ class TodoProvider : ContentProvider() {
             else -> null
         }
 
-
-
-    //content://hr.algebra.todoapp.api.provider/items/22
-
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        val id = repository.insert(values) // 22
-        return ContentUris.withAppendedId(TODO_PROVIDER_CONTENT_URI, id)
+        val id = repository.insert(values)
+        val respUri = ContentUris.withAppendedId(TODO_PROVIDER_CONTENT_URI, id)
+        context?.contentResolver?.notifyChange(respUri, null)
+        return respUri
     }
 
     override fun onCreate(): Boolean {
@@ -67,26 +65,34 @@ class TodoProvider : ContentProvider() {
     override fun query(
         uri: Uri, projection: Array<String>?, selection: String?,
         selectionArgs: Array<String>?, sortOrder: String?
-    ): Cursor = repository.query(
-        projection,
-        selection,
-        selectionArgs,
-        sortOrder
-    )
+    ): Cursor? {
+        val cursor = repository.query(
+            projection,
+            selection,
+            selectionArgs,
+            sortOrder
+        )
+        cursor?.setNotificationUri(context?.contentResolver, uri)
+        return cursor
+    }
 
     override fun update(
         uri: Uri, values: ContentValues?, selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        when(URI_MATCHER.match(uri)) {
-            TASKS -> return repository.update(values, selection, selectionArgs)
+        val count = when(URI_MATCHER.match(uri)) {
+            TASKS -> repository.update(values, selection, selectionArgs)
             TASK_ID -> {
                 val id = uri.lastPathSegment
                 if(id != null)
-                    return repository.update(values, "${Task::_id.name}=?", arrayOf(id))
+                    repository.update(values, "${Task::_id.name}=?", arrayOf(id))
+                else 0
             }
+            else -> throw IllegalArgumentException("Wrong uri")
         }
-        throw IllegalArgumentException("Wrong uri")
-
+        if (count > 0) {
+            context?.contentResolver?.notifyChange(uri, null)
+        }
+        return count
     }
 }

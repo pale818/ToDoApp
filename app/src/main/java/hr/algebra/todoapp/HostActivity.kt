@@ -9,6 +9,9 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import hr.algebra.todoapp.databinding.ActivityHostBinding
+import android.content.Intent
+import android.widget.Toast
+
 
 class HostActivity : AppCompatActivity() {
 
@@ -70,5 +73,36 @@ class HostActivity : AppCompatActivity() {
     private fun initNavigation() {
         val navController = findNavController(this, R.id.navController)
         NavigationUI.setupWithNavController(binding.navView, navController)
+        binding.navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menuAddTask -> {
+                    startActivity(Intent(this, AddEditTaskActivity::class.java))
+                    binding.drawerLayout.closeDrawers()
+                    true
+                }
+                R.id.menuDeleteAll -> {
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.delete_all)
+                        .setMessage(R.string.delete_all_confirm)
+                        .setPositiveButton("OK") { _, _ ->
+                            contentResolver.delete(TODO_PROVIDER_CONTENT_URI, null, null)
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
+                    binding.drawerLayout.closeDrawers()
+                    true
+                }
+
+
+                else -> {
+                    Toast.makeText(this, "Bye", Toast.LENGTH_SHORT).show()
+                    val handled = NavigationUI.onNavDestinationSelected(item, findNavController(this, R.id.navController))
+                    binding.drawerLayout.closeDrawers()
+                    handled
+                }
+            }
+        }
     }
+
+
 }

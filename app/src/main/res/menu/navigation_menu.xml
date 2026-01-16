@@ -6,8 +6,28 @@
         android:title="@string/tasks"
         android:icon="@drawable/items" />
 
+
+    <item
+        android:id="@+id/menuAddTask"
+        android:title="@string/add_new_task"
+        android:icon="@drawable/items" />
+
+
+
+    <item
+        android:id="@+id/menuDeleteAll"
+        android:title="@string/delete_all"
+        android:icon="@drawable/ic_delete" />
+
+
+
+
+
     <item
         android:id="@+id/menuAbout"
         android:title="@string/about"
         android:icon="@drawable/about" />
+
+
+
 </menu>

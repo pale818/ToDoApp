@@ -20,5 +20,11 @@
     <string name="done">Done</string>
     <string name="save">Save</string>
     <string name="title_required">Title is required</string>
+    <string name="delete_all">Delete all</string>
+    <string name="delete_all_confirm">Delete ALL tasks?</string>
+    <string name="add_new_task">Add new task</string>
+
+
+
 
 </resources>
