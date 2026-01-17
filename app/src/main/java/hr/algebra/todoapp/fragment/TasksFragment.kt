@@ -27,6 +27,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             if (result.resultCode == Activity.RESULT_OK) loadTasks()
         }
 
+    override fun onResume() {
+        super.onResume()
+        loadTasks()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

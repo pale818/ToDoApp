@@ -66,12 +66,25 @@ class TodoProvider : ContentProvider() {
         uri: Uri, projection: Array<String>?, selection: String?,
         selectionArgs: Array<String>?, sortOrder: String?
     ): Cursor? {
+
+        val (finalSelection, finalArgs) = when (URI_MATCHER.match(uri)) {
+            TASKS -> selection to selectionArgs
+
+            TASK_ID -> {
+                val id = uri.lastPathSegment
+                "${Task::_id.name}=?" to arrayOf(id!!)
+            }
+
+            else -> throw IllegalArgumentException("Wrong uri")
+        }
+
         val cursor = repository.query(
             projection,
-            selection,
-            selectionArgs,
+            finalSelection,
+            finalArgs,
             sortOrder
         )
+
         cursor?.setNotificationUri(context?.contentResolver, uri)
         return cursor
     }
