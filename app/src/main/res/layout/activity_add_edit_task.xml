@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:padding="20dp">
+    android:padding="@dimen/padding_l">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +16,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/title"
             android:inputType="text"
-            android:layout_marginTop="25dp" />
-
+            android:layout_marginTop="@dimen/margin_l" />
 
         <EditText
             android:id="@+id/etNotes"
@@ -26,7 +25,7 @@
             android:hint="@string/notes"
             android:inputType="textMultiLine"
             android:minLines="3"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="@dimen/margin_xs" />
 
         <EditText
             android:id="@+id/etDueDate"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/due_date"
             android:inputType="text"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="@dimen/margin_xs" />
 
         <EditText
             android:id="@+id/etPriority"
@@ -42,20 +41,20 @@
             android:layout_height="wrap_content"
             android:hint="@string/priority"
             android:inputType="number"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="@dimen/margin_xs" />
 
         <CheckBox
             android:id="@+id/cbDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/done"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="@dimen/margin_xs" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="@dimen/padding_l">
 
             <Button
                 android:id="@+id/btnSave"
@@ -69,7 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="@dimen/margin_xs"
                 android:text="@string/cancel" />
 
         </LinearLayout>

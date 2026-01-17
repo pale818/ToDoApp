@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="app_name">ToDo</string>
+        <string name="please_wait">Molimo pričekajte</string>
+        <string name="no_internet">Nema interneta</string>
+        <string name="hello_blank_fragment">Pozdrav prazni fragment</string>
+        <string name="notification_app">Aplikacija za obavijesti</string>
+        <string name="tasks">Zadaci</string>
+        <string name="about">O aplikaciji</string>
+        <string name="exit">Izlaz</string>
+        <string name="do_you_really_want_to_exit">Želite li stvarno izaći?</string>
+        <string name="cancel">Odustani</string>
+        <string name="delete">Obriši</string>
+        <string name="delete_confirm">Obrisati ovaj zadatak?</string>
+
+        <string name="title">Naslov</string>
+        <string name="notes">Bilješke</string>
+        <string name="due_date">Rok</string>
+        <string name="priority">Prioritet</string>
+        <string name="done">Završeno</string>
+        <string name="save">Spremi</string>
+        <string name="title_required">Naslov je obavezan</string>
+        <string name="delete_all">Obriši sve</string>
+        <string name="delete_all_confirm">Obrisati SVE zadatke?</string>
+        <string name="add_new_task">Dodaj novi zadatak</string>
+        <string name="task_title">Naslov zadatka</string>
+        <string name="insert_failed">Spremanje nije uspjelo</string>
+        <string name="update_failed">Ažuriranje nije uspjelo</string>
+        <string name="save_failed">Spremanje nije uspjelo</string>
+
+</resources>

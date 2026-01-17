@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="_50dp">50dp</dimen>
-    <dimen name="_400dp">400dp</dimen>
-    <dimen name="_50sp">50sp</dimen>
-    <dimen name="_20dp">20dp</dimen>
-    <dimen name="_25dp">25dp</dimen>
-    <dimen name="_150dp">150dp</dimen>
-    <dimen name="_100dp">100dp</dimen>
-    <dimen name="_162dp">162dp</dimen>
-    <dimen name="_240dp">240dp</dimen>
+    <dimen name="padding_s">8dp</dimen>
+    <dimen name="padding_m">16dp</dimen>
+    <dimen name="margin_s">8dp</dimen>
+    <dimen name="margin_m">16dp</dimen>
+
+    <dimen name="card_corner">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+
+    <dimen name="drawer_min_width">280dp</dimen>
+
+    <dimen name="text_title">16sp</dimen>
+    <dimen name="padding_l">20dp</dimen>
+    <dimen name="margin_xs">12dp</dimen>
+    <dimen name="margin_l">25dp</dimen>
+
 </resources>

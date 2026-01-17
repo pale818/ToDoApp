@@ -19,7 +19,7 @@
         android:layout_weight="1"
         android:gravity="top|center"
         android:text="@string/notification_app"
-        android:textSize="@dimen/_50sp" />
+        android:textSize="@dimen/text_title" />
 
 
 </LinearLayout>

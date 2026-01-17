@@ -95,7 +95,6 @@ class HostActivity : AppCompatActivity() {
 
 
                 else -> {
-                    Toast.makeText(this, "Bye", Toast.LENGTH_SHORT).show()
                     val handled = NavigationUI.onNavDestinationSelected(item, findNavController(this, R.id.navController))
                     binding.drawerLayout.closeDrawers()
                     handled

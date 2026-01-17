@@ -64,14 +64,14 @@ class AddEditTaskActivity : AppCompatActivity() {
             if (taskId == null) {
                 val res = contentResolver.insert(TODO_PROVIDER_CONTENT_URI, values)
                 if (res == null || ContentUris.parseId(res) == -1L) {
-                    Toast.makeText(this, "Insert failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "@string/insert_failed", Toast.LENGTH_SHORT).show()
                     return
                 }
             } else {
                 val uri = ContentUris.withAppendedId(TODO_PROVIDER_CONTENT_URI, taskId!!)
                 val count = contentResolver.update(uri, values, null, null)
                 if (count == 0) {
-                    Toast.makeText(this, "Update failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "@string/update_failed", Toast.LENGTH_SHORT).show()
                     return
                 }
             }
@@ -80,7 +80,7 @@ class AddEditTaskActivity : AppCompatActivity() {
             finish()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, e.message ?: "Save failed", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, e.message ?: "@string/save_failed", Toast.LENGTH_LONG).show()
         }
     }
 

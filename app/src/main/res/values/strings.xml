@@ -23,6 +23,10 @@
     <string name="delete_all">Delete all</string>
     <string name="delete_all_confirm">Delete ALL tasks?</string>
     <string name="add_new_task">Add new task</string>
+    <string name="task_title">Task title</string>
+    <string name="insert_failed">Insert failed</string>
+    <string name="update_failed">Update failed</string>
+    <string name="save_failed">Save title</string>
 
 
 
