@@ -15,4 +15,15 @@
     <dimen name="margin_xs">12dp</dimen>
     <dimen name="margin_l">25dp</dimen>
 
+    <dimen name="splash_padding">50dp</dimen>
+    <dimen name="splash_image_height">400dp</dimen>
+
+    <dimen name="_25dp">25dp</dimen>
+    <dimen name="_100dp">100dp</dimen>
+    <dimen name="_150dp">150dp</dimen>
+
+    <dimen name="_20dp">20dp</dimen>
+    <dimen name="_50dp">50dp</dimen>
+    <dimen name="_400dp">400dp</dimen>
+
 </resources>

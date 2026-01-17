@@ -10,6 +10,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import hr.algebra.todoapp.databinding.ActivityHostBinding
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 
 
@@ -85,8 +86,11 @@ class HostActivity : AppCompatActivity() {
                         .setTitle(R.string.delete_all)
                         .setMessage(R.string.delete_all_confirm)
                         .setPositiveButton("OK") { _, _ ->
-                            contentResolver.delete(TODO_PROVIDER_CONTENT_URI, null, null)
+                            val rows = contentResolver.delete(TODO_PROVIDER_CONTENT_URI, null, null)
+                            Log.d("DELETE_ALL", "rows=$rows")
+                            sendBroadcast(Intent("hr.algebra.todoapp.TASKS_CHANGED"))
                         }
+
                         .setNegativeButton(R.string.cancel, null)
                         .show()
                     binding.drawerLayout.closeDrawers()

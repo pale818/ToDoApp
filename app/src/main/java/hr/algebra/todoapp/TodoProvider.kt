@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import hr.algebra.todoapp.dao.TodoRepository
 import hr.algebra.todoapp.dao.getToDoRepository
@@ -27,6 +28,7 @@ class TodoProvider : ContentProvider() {
     private lateinit var repository: TodoRepository
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        Log.e("PROVIDER", "delete uri=$uri match=${URI_MATCHER.match(uri)}")
         val count = when(URI_MATCHER.match(uri)) {
             TASKS -> repository.delete(selection, selectionArgs)
             TASK_ID -> {

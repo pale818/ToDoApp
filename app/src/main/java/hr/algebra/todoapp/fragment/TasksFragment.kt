@@ -1,13 +1,17 @@
 package hr.algebra.todoapp.fragment
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.ContentUris
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +35,26 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         super.onResume()
         loadTasks()
     }
+
+    private val tasksChangedReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) { loadTasks() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            tasksChangedReceiver,
+            IntentFilter("hr.algebra.todoapp.TASKS_CHANGED"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onStop() {
+        requireContext().unregisterReceiver(tasksChangedReceiver)
+        super.onStop()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,7 +125,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                 )
             }
         }
-
+        adapter.submitList(null)
         adapter.submitList(tasks)
     }
 }
