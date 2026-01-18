@@ -17,6 +17,16 @@ class TasksAdapter(
     private val onLongClick: (Task) -> Unit
 ) : ListAdapter<Task, TasksAdapter.TaskVH>(DIFF) {
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        // Safe fallback just in case something slips in without an id
+        return getItem(position)._id ?: RecyclerView.NO_ID
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskVH {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskVH(view)

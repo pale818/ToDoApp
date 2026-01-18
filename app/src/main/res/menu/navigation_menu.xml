@@ -19,10 +19,6 @@
         android:title="@string/delete_all"
         android:icon="@drawable/ic_delete" />
 
-
-
-
-
     <item
         android:id="@+id/menuAbout"
         android:title="@string/about"

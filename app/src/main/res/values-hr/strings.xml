@@ -28,4 +28,6 @@
         <string name="update_failed">Ažuriranje nije uspjelo</string>
         <string name="save_failed">Spremanje nije uspjelo</string>
         <string name="ok">OK</string>
+        <string name="empty_tasks">Nema bilježaka još. Pritisnite + za dodati bilješku.</string>
+
 </resources>

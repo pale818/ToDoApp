@@ -26,10 +26,26 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     private lateinit var rvTasks: RecyclerView
     private lateinit var adapter: TasksAdapter
 
+    private lateinit var tvEmpty: View
+
     private val addEditLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) loadTasks()
         }
+
+    private val filter: TasksFilter by lazy {
+        val name = arguments?.getString(ARG_FILTER) ?: TasksFilter.ALL.name
+        TasksFilter.valueOf(name)
+    }
+
+    companion object {
+        private const val ARG_FILTER = "ARG_FILTER"
+
+        fun newInstance(filter: TasksFilter) = TasksFragment().apply {
+            arguments = Bundle().apply { putString(ARG_FILTER, filter.name) }
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -40,6 +56,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         super.onViewCreated(view, savedInstanceState)
 
         rvTasks = view.findViewById(R.id.rvTasks)
+        tvEmpty = view.findViewById(R.id.tvEmpty)
+
 
         adapter = TasksAdapter(
             onClick = { task ->
@@ -105,7 +123,17 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                 )
             }
         }
-        adapter.submitList(null)
-        adapter.submitList(tasks)
+        val filtered = when (filter) {
+            TasksFilter.ALL -> tasks
+            TasksFilter.ACTIVE -> tasks.filter { !it.done }
+            TasksFilter.DONE -> tasks.filter { it.done }
+        }
+
+        adapter.submitList(filtered)
+
+
+        tvEmpty.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
+        rvTasks.visibility = if (tasks.isEmpty()) View.GONE else View.VISIBLE
+
     }
 }

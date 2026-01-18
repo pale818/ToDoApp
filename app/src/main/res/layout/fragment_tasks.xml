@@ -12,4 +12,17 @@
         android:padding="@dimen/padding_m"
         tools:listitem="@layout/item_task" />
 
+    <!-- Empty state -->
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/empty_tasks"
+        android:textSize="16sp"
+        android:textColor="?android:textColorSecondary"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </FrameLayout>
+

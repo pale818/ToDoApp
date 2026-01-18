@@ -28,4 +28,6 @@
     <string name="update_failed">Update failed</string>
     <string name="save_failed">Save title</string>
     <string name="ok">OK</string>
+    <string name="empty_tasks">No tasks yet. Tap + to add one.</string>
+
 </resources>
