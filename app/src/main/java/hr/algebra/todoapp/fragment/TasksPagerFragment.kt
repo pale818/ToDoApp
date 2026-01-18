@@ -1,15 +1,30 @@
 package hr.algebra.todoapp.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.algebra.todoapp.R
+import hr.algebra.todoapp.AddEditTaskActivity
+import hr.algebra.todoapp.TODO_PROVIDER_CONTENT_URI
+
 
 enum class TasksFilter { ALL, ACTIVE, DONE }
 
 class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
+
+    private var sortMode = 0 // 0 = newest, 1 = title
+
+    private fun notifyTabsToRefresh() {
+        val current = childFragmentManager.fragments
+            .firstOrNull { it is TasksFragment && it.isVisible } as? TasksFragment
+        current?.setSortMode(sortMode)
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,4 +54,51 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
             }
         }.attach()
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_tasks, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add -> {
+                startActivity(Intent(requireContext(), AddEditTaskActivity::class.java))
+                true
+            }
+            R.id.action_sort -> {
+                // We'll implement in step 3 below
+                sortMode = (sortMode + 1) % 2
+                notifyTabsToRefresh()
+                true
+            }
+            R.id.action_clear_completed -> {
+                clearCompleted()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+    private fun notifyAllTabsReload() {
+        childFragmentManager.fragments
+            .filterIsInstance<TasksFragment>()
+            .forEach { it.reload() }
+    }
+
+    private fun clearCompleted() {
+        // easiest: launch an intent/dialog later; for now just run delete logic
+        val ctx = requireContext().applicationContext
+        ctx.contentResolver.delete(
+            TODO_PROVIDER_CONTENT_URI,
+            "done = ?",
+            arrayOf("1")
+        )
+        notifyAllTabsReload()
+    }
+
+
 }

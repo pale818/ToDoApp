@@ -28,6 +28,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     private lateinit var tvEmpty: View
 
+    private var sortMode = 0
+
+    fun setSortMode(mode: Int) {
+        sortMode = mode
+        loadTasks()
+    }
+    fun reload() = loadTasks()
+
+
     private val addEditLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) loadTasks()
@@ -129,9 +138,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             TasksFilter.DONE -> tasks.filter { it.done }
         }
 
+        val sorted = when (sortMode) {
+            1 -> filtered.sortedBy { it.title.lowercase() }
+            else -> filtered.sortedByDescending { it._id ?: 0L } // newest by id
+        }
+        adapter.submitList(sorted)
+
         adapter.submitList(filtered)
-
-
         tvEmpty.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
         rvTasks.visibility = if (tasks.isEmpty()) View.GONE else View.VISIBLE
 
