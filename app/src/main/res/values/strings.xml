@@ -27,8 +27,5 @@
     <string name="insert_failed">Insert failed</string>
     <string name="update_failed">Update failed</string>
     <string name="save_failed">Save title</string>
-
-
-
-
+    <string name="ok">OK</string>
 </resources>

@@ -36,26 +36,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         loadTasks()
     }
 
-    private val tasksChangedReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) { loadTasks() }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        ContextCompat.registerReceiver(
-            requireContext(),
-            tasksChangedReceiver,
-            IntentFilter("hr.algebra.todoapp.TASKS_CHANGED"),
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-    }
-
-    override fun onStop() {
-        requireContext().unregisterReceiver(tasksChangedReceiver)
-        super.onStop()
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

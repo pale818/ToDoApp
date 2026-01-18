@@ -85,17 +85,25 @@ class HostActivity : AppCompatActivity() {
                     AlertDialog.Builder(this)
                         .setTitle(R.string.delete_all)
                         .setMessage(R.string.delete_all_confirm)
-                        .setPositiveButton("OK") { _, _ ->
+                        .setPositiveButton(getString(R.string.ok)) { _, _ ->
                             val rows = contentResolver.delete(TODO_PROVIDER_CONTENT_URI, null, null)
                             Log.d("DELETE_ALL", "rows=$rows")
-                            sendBroadcast(Intent("hr.algebra.todoapp.TASKS_CHANGED"))
+
+
+                            val navController = findNavController(this, R.id.navController)
+                            navController.navigate(R.id.menuItems)
+
+
+                            binding.drawerLayout.closeDrawers()
                         }
+
 
                         .setNegativeButton(R.string.cancel, null)
                         .show()
                     binding.drawerLayout.closeDrawers()
                     true
                 }
+
 
 
                 else -> {
