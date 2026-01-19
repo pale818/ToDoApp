@@ -5,5 +5,7 @@ data class Task(
     val notes: String,
     val done: Boolean,
     val priority: Int,
-    val dueDate: Long? = null
+    val dueDate: Long? = null,
+    val category: String = "personal"
+
 )

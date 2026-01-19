@@ -5,10 +5,15 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import hr.algebra.todoapp.R
 import hr.algebra.todoapp.model.Task
+import kotlin.coroutines.coroutineContext
 
 private const val DB_NAME = "tasks.db"
-private const val DB_VERSION = 2
+private const val DB_VERSION = 4
 private const val TABLE_NAME = "tasks"
 private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::_id.name} integer primary key autoincrement, " +
@@ -17,7 +22,9 @@ private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::dueDate.name} long, " +
         "${Task::done.name} integer not null default 0, " +
         "${Task::priority.name} integer not null default 0 " +
+        //"${Task::category.name} text not null default 'personal' " +
         ")"
+
 private const val DROP_TABLE = "drop table if exists $TABLE_NAME"
 
 class TodoDbRepository(context: Context?) :
@@ -67,15 +74,43 @@ class TodoDbRepository(context: Context?) :
     )
 
     override fun onCreate(db: SQLiteDatabase?) {
+        if (db == null) return
+
+        Log.e("paola: DB_CREATE", "onCreate")
+        val c = db.rawQuery("PRAGMA table_info($TABLE_NAME)", null)
+        c.use {
+            while (it.moveToNext()) {
+                Log.e("DB_COL", it.getString(1)) // column name
+            }
+        }
+
         db?.execSQL(CREATE_TABLE)
+
     }
 
-    override fun onUpgrade(
+    /*override fun onUpgrade(
         db: SQLiteDatabase?,
         oldVersion: Int,
         newVersion: Int
     ) {
         db?.execSQL(DROP_TABLE)
         onCreate(db)
+    }*/
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        Log.e("paola: DB_UPGRADE", "onUpgrade ${newVersion} > ${oldVersion}")
+        val c = db.rawQuery("PRAGMA table_info($TABLE_NAME)", null)
+        c.use {
+            while (it.moveToNext()) {
+                Log.e("paola: DB_COL", it.getString(1)) // column name
+            }
+        }
+        /*
+        if (oldVersion < 5) {
+            db.execSQL(
+                "ALTER TABLE tasks ADD COLUMN category TEXT NOT NULL DEFAULT 'personal'"
+            )
+        }*/
     }
+
 }

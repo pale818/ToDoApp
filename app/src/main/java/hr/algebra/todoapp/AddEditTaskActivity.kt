@@ -14,6 +14,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import hr.algebra.todoapp.framework.TaskReminderScheduler
 import hr.algebra.todoapp.framework.notificationsEnabled
+import android.widget.ArrayAdapter
+import android.widget.AdapterView
+import android.view.View
+
 
 
 
@@ -26,6 +30,8 @@ class AddEditTaskActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddEditTaskBinding
     private var taskId: Long? = null
 
+    private lateinit var categories: Array<String>
+    private var selectedCategory: String = "personal"
 
     private var dueAtMillis: Long? = null
 
@@ -48,12 +54,41 @@ class AddEditTaskActivity : AppCompatActivity() {
         binding.etDueDate.setOnClickListener {
             pickDueDateTime()
         }
+        categories = resources.getStringArray(R.array.task_categories)
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            categories
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.spCategory.adapter = adapter
+
+        binding.spCategory.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedCategory = categories[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    selectedCategory = "personal"
+                }
+            }
+
 
     }
 
     private fun loadTask(id: Long) {
         val uri = ContentUris.withAppendedId(TODO_PROVIDER_CONTENT_URI, id)
         val cursor = contentResolver.query(uri, null, null, null, null) ?: return
+
+
 
         cursor.use {
             if (it.moveToFirst()) {
@@ -67,6 +102,13 @@ class AddEditTaskActivity : AppCompatActivity() {
 
                 binding.etPriority.setText(it.getInt(it.getColumnIndexOrThrow(Task::priority.name)).toString())
                 binding.cbDone.isChecked = it.getInt(it.getColumnIndexOrThrow(Task::done.name)) == 1
+                val cat = it.getString(it.getColumnIndexOrThrow(Task::category.name))
+                val index = categories.indexOf(cat)
+                if (index >= 0) {
+                    binding.spCategory.setSelection(index)
+                }
+
+
             }
         }
     }
@@ -88,6 +130,8 @@ class AddEditTaskActivity : AppCompatActivity() {
             put(Task::dueDate.name, dueAtMillis) // Long? (INTEGER in DB)
             put(Task::priority.name, binding.etPriority.text.toString().toIntOrNull() ?: 0)
             put(Task::done.name, if (isDone) 1 else 0)
+            put(Task::category.name, selectedCategory)
+
         }
 
         try {

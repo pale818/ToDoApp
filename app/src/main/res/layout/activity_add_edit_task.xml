@@ -73,6 +73,12 @@
                 android:layout_marginStart="@dimen/margin_xs"
                 android:text="@string/cancel" />
 
+            <Spinner
+                android:id="@+id/spCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
         </LinearLayout>
 
     </LinearLayout>
