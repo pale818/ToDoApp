@@ -12,7 +12,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import hr.algebra.todoapp.R
 import hr.algebra.todoapp.AddEditTaskActivity
 import hr.algebra.todoapp.TODO_PROVIDER_CONTENT_URI
-
+import android.app.AlertDialog
+import hr.algebra.todoapp.SettingsActivity
 
 enum class TasksFilter { ALL, ACTIVE, DONE }
 
@@ -25,6 +26,15 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
             .firstOrNull { it is TasksFragment && it.isVisible } as? TasksFragment
         current?.setSortMode(sortMode)
     }
+
+    private val settingsLauncher =
+        registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) {
+            // force visible list to rebind items so font size is reapplied
+            childFragmentManager.fragments
+                .filterIsInstance<TasksFragment>()
+                .forEach { it.refreshListUI() }
+        }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,9 +87,15 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
                 true
             }
             R.id.action_clear_completed -> {
-                clearCompleted()
+                confirmClearCompleted()
                 true
             }
+            R.id.action_settings -> {
+                settingsLauncher.launch(Intent(requireContext(), SettingsActivity::class.java))
+                true
+            }
+
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -89,6 +105,16 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
             .forEach { it.reload() }
     }
 
+    private fun confirmClearCompleted() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Clear completed?")
+            .setMessage("All completed tasks will be removed.")
+            .setNegativeButton("Cancel", null)
+            .setPositiveButton("Clear") { _, _ ->
+                clearCompleted()  // <- your existing clear completed logic
+            }
+            .show()
+    }
     private fun clearCompleted() {
         // easiest: launch an intent/dialog later; for now just run delete logic
         val ctx = requireContext().applicationContext

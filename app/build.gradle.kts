@@ -60,4 +60,6 @@ dependencies {
     // picasso
     implementation(libs.picasso)
     implementation(libs.picasso.transformations)
+
+    implementation("androidx.preference:preference-ktx:1.2.1")
 }

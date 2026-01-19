@@ -29,5 +29,7 @@
         <string name="save_failed">Spremanje nije uspjelo</string>
         <string name="ok">OK</string>
         <string name="empty_tasks">Nema bilježaka još. Pritisnite + za dodati bilješku.</string>
+        <string name="settings">Postavke</string>
+
 
 </resources>

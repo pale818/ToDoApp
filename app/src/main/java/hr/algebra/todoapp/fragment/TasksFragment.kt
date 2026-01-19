@@ -36,6 +36,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     }
     fun reload() = loadTasks()
 
+    fun refreshListUI() {
+        rvTasks.adapter?.notifyDataSetChanged()
+    }
 
     private val addEditLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

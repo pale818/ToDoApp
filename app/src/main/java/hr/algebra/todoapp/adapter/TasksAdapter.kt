@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,16 @@ class TasksAdapter(
         fun bind(task: Task) {
             tvTitle.text = task.title
 
+            val prefs = PreferenceManager.getDefaultSharedPreferences(itemView.context)
+            val font = prefs.getString("pref_font", "medium")
+
+            val sizeSp = when (font) {
+                "small" -> 14f
+                "large" -> 20f
+                else -> 16f
+            }
+            tvTitle.textSize = sizeSp
+
             cbDone.setOnCheckedChangeListener(null)
             cbDone.isChecked = task.done
 
@@ -56,6 +67,7 @@ class TasksAdapter(
                 onToggleDone(task, isChecked)
             }
         }
+
     }
 
     companion object {

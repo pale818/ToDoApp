@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<SwitchPreferenceCompat
+        app:key="pref_show_done"
+        app:title="Show completed tasks"
+        app:defaultValue="true" />-->
+
+    <ListPreference
+        app:key="pref_font"
+        app:title="Task text size"
+        app:dialogTitle="Task text size"
+        app:entries="@array/font_entries"
+        app:entryValues="@array/font_values"
+        app:defaultValue="medium" />
+
+
+</PreferenceScreen>
