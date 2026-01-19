@@ -11,6 +11,11 @@ import androidx.navigation.ui.NavigationUI
 import hr.algebra.todoapp.databinding.ActivityHostBinding
 import android.content.Intent
 import android.util.Log
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import android.widget.Toast
 
 
@@ -18,11 +23,35 @@ class HostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHostBinding
 
+    private val notifPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            Toast.makeText(
+                this,
+                if (granted) "Notifications enabled" else "Notifications disabled",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    private fun askNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+        val granted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!granted) {
+            notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        askNotificationPermissionIfNeeded()
         initHamburgerMenu()
         initNavigation()
     }

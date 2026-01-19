@@ -147,7 +147,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                         _id = it.getLong(idIx),
                         title = it.getString(titleIx),
                         notes = it.getString(notesIx),
-                        dueDate = it.getString(dueIx),
+                        dueDate = it.getLong(dueIx),
                         done = it.getInt(doneIx) == 1,
                         priority = it.getInt(prIx)
                     )
