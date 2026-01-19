@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import hr.algebra.todoapp.databinding.ActivityAddEditTaskBinding
 import hr.algebra.todoapp.model.Task
 import android.widget.Toast
+import java.util.Calendar
 
 
 class AddEditTaskActivity : AppCompatActivity() {
@@ -17,6 +18,9 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddEditTaskBinding
     private var taskId: Long? = null
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +42,7 @@ class AddEditTaskActivity : AppCompatActivity() {
             if (it.moveToFirst()) {
                 binding.etTitle.setText(it.getString(it.getColumnIndexOrThrow(Task::title.name)))
                 binding.etNotes.setText(it.getString(it.getColumnIndexOrThrow(Task::notes.name)))
-                binding.etDueDate.setText(it.getString(it.getColumnIndexOrThrow(Task::dueDate.name)))
+                binding.etDueDate.setText(it.getLong(it.getColumnIndexOrThrow(Task::dueDate.name)).toString())
                 binding.etPriority.setText(it.getInt(it.getColumnIndexOrThrow(Task::priority.name)).toString())
                 binding.cbDone.isChecked = it.getInt(it.getColumnIndexOrThrow(Task::done.name)) == 1
             }
@@ -46,16 +50,19 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     private fun save() {
+
         val title = binding.etTitle.text.toString().trim()
         if (title.isBlank()) {
             binding.etTitle.error = getString(R.string.title_required)
             return
         }
 
+        val dueAtMillis = binding.etDueDate.text.toString().trim().toLongOrNull()
+
         val values = ContentValues().apply {
             put(Task::title.name, title)
             put(Task::notes.name, binding.etNotes.text.toString().trim())
-            put(Task::dueDate.name, binding.etDueDate.text.toString().trim())
+            put(Task::dueDate.name, dueAtMillis) // store as Long (nullable ok)
             put(Task::priority.name, binding.etPriority.text.toString().toIntOrNull() ?: 0)
             put(Task::done.name, if (binding.cbDone.isChecked) 1 else 0)
         }
@@ -82,6 +89,13 @@ class AddEditTaskActivity : AppCompatActivity() {
             e.printStackTrace()
             Toast.makeText(this, e.message ?: "@string/save_failed", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun computeDueAtMillis(year: Int, month: Int, day: Int, hour: Int, minute: Int): Long {
+        val cal = Calendar.getInstance()
+        cal.set(year, month, day, hour, minute, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        return cal.timeInMillis
     }
 
 }

@@ -12,4 +12,14 @@
         <item>large</item>
     </string-array>
 
+    <string-array name="sort_entries">
+        <item>Created (newest)</item>
+        <item>Priority (high first)</item>
+    </string-array>
+
+    <string-array name="sort_values">
+        <item>created</item>
+        <item>priority</item>
+    </string-array>
+
 </resources>

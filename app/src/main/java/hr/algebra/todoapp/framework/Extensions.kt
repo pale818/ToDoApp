@@ -43,3 +43,13 @@ fun callDelayed(delay: Long, work: Runnable) {
         delay
     )
 }
+fun Context.prefs() = PreferenceManager.getDefaultSharedPreferences(this)
+
+//FOR SORTING(static helper func):
+fun Context.prefSort(): String =
+    prefs().getString("pref_sort", "created") ?: "created"
+
+
+//NOTIFICATIONS:
+fun Context.notificationsEnabled(): Boolean =
+    prefs().getBoolean("pref_notifications", true)

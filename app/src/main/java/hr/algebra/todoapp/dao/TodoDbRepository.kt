@@ -14,7 +14,7 @@ private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::_id.name} integer primary key autoincrement, " +
         "${Task::title.name} text not null, " +
         "${Task::notes.name} text, " +
-        "${Task::dueDate.name} text, " +
+        "${Task::dueDate.name} long, " +
         "${Task::done.name} integer not null default 0, " +
         "${Task::priority.name} integer not null default 0 " +
         ")"

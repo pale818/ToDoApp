@@ -13,13 +13,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hr.algebra.todoapp.AddEditTaskActivity
 import hr.algebra.todoapp.R
 import hr.algebra.todoapp.TODO_PROVIDER_CONTENT_URI
 import hr.algebra.todoapp.adapter.TasksAdapter
+import hr.algebra.todoapp.framework.prefSort
 import hr.algebra.todoapp.model.Task
+import android.content.SharedPreferences
+import android.widget.Toast
 
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
@@ -59,10 +63,25 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     }
 
 
+    private val prefListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == "pref_sort") loadTasks()
+        }
+
     override fun onResume() {
         super.onResume()
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .registerOnSharedPreferenceChangeListener(prefListener)
+
         loadTasks()
     }
+
+    override fun onPause() {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .unregisterOnSharedPreferenceChangeListener(prefListener)
+        super.onPause()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -141,13 +160,17 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             TasksFilter.DONE -> tasks.filter { it.done }
         }
 
-        val sorted = when (sortMode) {
-            1 -> filtered.sortedBy { it.title.lowercase() }
-            else -> filtered.sortedByDescending { it._id ?: 0L } // newest by id
+        val sort = requireContext().prefSort()
+
+        Toast.makeText(requireContext(), "sort: ${sort}", Toast.LENGTH_SHORT).show()
+        val sorted = when (sort) {
+            "priority" -> filtered.sortedByDescending { it.priority }  // adjust field name
+            else -> filtered.sortedByDescending { it._id ?: 0L }       // “created/newest”
         }
+
         adapter.submitList(sorted)
 
-        adapter.submitList(filtered)
+
         tvEmpty.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
         rvTasks.visibility = if (tasks.isEmpty()) View.GONE else View.VISIBLE
 
