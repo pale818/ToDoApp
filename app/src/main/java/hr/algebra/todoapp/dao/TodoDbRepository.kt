@@ -13,7 +13,9 @@ import hr.algebra.todoapp.model.Task
 import kotlin.coroutines.coroutineContext
 
 private const val DB_NAME = "tasks.db"
-private const val DB_VERSION = 4
+
+// INCREASE IN ORDER TO GO INSIDE THE FUNCTION onUpgrade
+private const val DB_VERSION = 6
 private const val TABLE_NAME = "tasks"
 private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::_id.name} integer primary key autoincrement, " +
@@ -97,20 +99,35 @@ class TodoDbRepository(context: Context?) :
         onCreate(db)
     }*/
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        Log.e("paola: DB_UPGRADE", "onUpgrade ${newVersion} > ${oldVersion}")
+    fun logColumns(db: SQLiteDatabase) {
         val c = db.rawQuery("PRAGMA table_info($TABLE_NAME)", null)
         c.use {
             while (it.moveToNext()) {
-                Log.e("paola: DB_COL", it.getString(1)) // column name
+                Log.e("paola: DB_COL", it.getString(1))
             }
         }
-        /*
-        if (oldVersion < 5) {
-            db.execSQL(
-                "ALTER TABLE tasks ADD COLUMN category TEXT NOT NULL DEFAULT 'personal'"
-            )
-        }*/
     }
 
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        Log.e("paola: DB_UPGRADE", "onUpgrade $oldVersion -> $newVersion")
+
+        // MIGRATION
+        // 1) add category
+        logColumns(db)
+        if (oldVersion < DB_VERSION) {
+            db.execSQL(
+                "ALTER TABLE $TABLE_NAME ADD COLUMN category TEXT NOT NULL DEFAULT 'personal'"
+            )
+        }
+        logColumns(db)
+
+        // 2) return to original table(remove category),data loss
+        /*
+        logColumns(db)
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        db.execSQL(CREATE_TABLE)
+        logColumns(db)
+
+         */
+    }
 }

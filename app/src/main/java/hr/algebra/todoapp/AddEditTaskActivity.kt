@@ -41,19 +41,12 @@ class AddEditTaskActivity : AppCompatActivity() {
         binding = ActivityAddEditTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        taskId = intent.getLongExtra(EXTRA_TASK_ID, -1L).takeIf { it != -1L }
-        if (taskId != null) loadTask(taskId!!)
-
-        binding.btnSave.setOnClickListener { save() }
-        binding.btnCancel.setOnClickListener { finish() }
-
         // DATE PICKER
         binding.etDueDate.isFocusable = false
         binding.etDueDate.isClickable = true
+        binding.etDueDate.setOnClickListener { pickDueDateTime() }
 
-        binding.etDueDate.setOnClickListener {
-            pickDueDateTime()
-        }
+        // CATEGORY SPINNER (initialize FIRST)
         categories = resources.getStringArray(R.array.task_categories)
 
         val adapter = ArrayAdapter(
@@ -62,17 +55,11 @@ class AddEditTaskActivity : AppCompatActivity() {
             categories
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         binding.spCategory.adapter = adapter
 
         binding.spCategory.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     selectedCategory = categories[position]
                 }
 
@@ -81,8 +68,14 @@ class AddEditTaskActivity : AppCompatActivity() {
                 }
             }
 
+        // NOW read extras + load
+        taskId = intent.getLongExtra(EXTRA_TASK_ID, -1L).takeIf { it != -1L }
+        if (taskId != null) loadTask(taskId!!)
 
+        binding.btnSave.setOnClickListener { save() }
+        binding.btnCancel.setOnClickListener { finish() }
     }
+
 
     private fun loadTask(id: Long) {
         val uri = ContentUris.withAppendedId(TODO_PROVIDER_CONTENT_URI, id)
@@ -102,11 +95,14 @@ class AddEditTaskActivity : AppCompatActivity() {
 
                 binding.etPriority.setText(it.getInt(it.getColumnIndexOrThrow(Task::priority.name)).toString())
                 binding.cbDone.isChecked = it.getInt(it.getColumnIndexOrThrow(Task::done.name)) == 1
+
+                // MIGRATION FEATURE category
                 val cat = it.getString(it.getColumnIndexOrThrow(Task::category.name))
                 val index = categories.indexOf(cat)
                 if (index >= 0) {
                     binding.spCategory.setSelection(index)
                 }
+
 
 
             }
@@ -130,6 +126,7 @@ class AddEditTaskActivity : AppCompatActivity() {
             put(Task::dueDate.name, dueAtMillis) // Long? (INTEGER in DB)
             put(Task::priority.name, binding.etPriority.text.toString().toIntOrNull() ?: 0)
             put(Task::done.name, if (isDone) 1 else 0)
+            // MIGRATION FEATURE category
             put(Task::category.name, selectedCategory)
 
         }
