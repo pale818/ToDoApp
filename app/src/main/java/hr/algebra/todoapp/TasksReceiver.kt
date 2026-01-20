@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import hr.algebra.todoapp.framework.notificationsEnabled
 
@@ -46,6 +47,17 @@ class TasksReceiver : BroadcastReceiver() {
 
         val notifId = if (taskId != -1L) taskId.toInt() else (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
         nm.notify(notifId, notif)
+
+        //BROADCAST
+        if (taskId != 999L) return
+        Log.d("TasksReceiver", "Alarm/trigger fired for taskId=$taskId")
+        // Notify UI (your TasksFragment listens for this)
+        context.sendBroadcast(Intent(ACTION_REMINDER_FIRED).apply {
+            putExtra(EXTRA_TASK_ID, taskId)
+        })
+
+
+
     }
 
     private fun ensureChannel(nm: NotificationManager) {
@@ -61,5 +73,11 @@ class TasksReceiver : BroadcastReceiver() {
 
     companion object {
         private const val CHANNEL_ID = "task_reminders"
+
+        //BROADCAST
+        const val ACTION_REMINDER_FIRED = "hr.algebra.todoapp.ACTION_REMINDER_FIRED"
+        const val EXTRA_TASK_ID = "TASK_ID"
     }
+
+
 }

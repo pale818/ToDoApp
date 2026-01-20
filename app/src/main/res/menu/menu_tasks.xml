@@ -18,4 +18,8 @@
         android:id="@+id/action_settings"
         android:title="Settings" />
 
+    <item
+        android:id="@+id/action_test_receiver"
+        android:title="Test receiver" />
+
 </menu>

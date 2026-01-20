@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +23,12 @@ import hr.algebra.todoapp.framework.prefSort
 import hr.algebra.todoapp.model.Task
 import android.content.SharedPreferences
 import android.widget.Toast
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import androidx.core.content.ContextCompat
+import hr.algebra.todoapp.TasksReceiver
+
 
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
@@ -67,6 +72,23 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == "pref_sort") loadTasks()
         }
+
+    //HANDLER: DELAYED REFRESH
+    override fun onStart() {
+        super.onStart()
+        val filter = IntentFilter(TasksReceiver.ACTION_REMINDER_FIRED)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            reminderUiReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+    override fun onStop() {
+        requireContext().unregisterReceiver(reminderUiReceiver)
+        super.onStop()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -179,4 +201,23 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
 
     }
+
+    //HANDLER: DELAYED REFRESH
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    private val reminderUiReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val id = intent.getLongExtra(TasksReceiver.EXTRA_TASK_ID, -1L)
+            Log.d("TasksFragment", "Receiver event: reminder fired for taskId=$id")
+
+            Toast.makeText(requireContext(), "Reminder fired (taskId=$id). Refreshing…", Toast.LENGTH_SHORT).show()
+
+            // Handler/Looper demo: delayed refresh
+            mainHandler.postDelayed({
+                loadTasks()
+                Toast.makeText(requireContext(), "Refreshed after delay", Toast.LENGTH_SHORT).show()
+            }, 600)
+        }
+    }
+
 }

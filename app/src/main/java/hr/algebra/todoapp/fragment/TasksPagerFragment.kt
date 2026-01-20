@@ -13,7 +13,9 @@ import hr.algebra.todoapp.R
 import hr.algebra.todoapp.AddEditTaskActivity
 import hr.algebra.todoapp.TODO_PROVIDER_CONTENT_URI
 import android.app.AlertDialog
+import android.util.Log
 import hr.algebra.todoapp.SettingsActivity
+import hr.algebra.todoapp.TasksReceiver
 
 enum class TasksFilter { ALL, ACTIVE, DONE }
 
@@ -94,6 +96,19 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
                 settingsLauncher.launch(Intent(requireContext(), SettingsActivity::class.java))
                 true
             }
+
+            R.id.action_test_receiver -> {
+                Log.d("TaskPagerFragment", "Alarm/trigger fired")
+
+                val i = Intent(requireContext(), TasksReceiver::class.java).apply {
+                    putExtra("TASK_ID", 999L)
+                    putExtra("TITLE", "Receiver test")
+                    putExtra("TEXT", "Alarm fired → receiver ran.")
+                }
+                requireContext().sendBroadcast(i)
+                true
+            }
+
 
 
             else -> super.onOptionsItemSelected(item)
