@@ -22,6 +22,7 @@ class TasksAdapter(
         setHasStableIds(true)
     }
 
+
     override fun getItemId(position: Int): Long {
         // Safe fallback just in case something slips in without an id
         return getItem(position)._id ?: RecyclerView.NO_ID
@@ -41,8 +42,11 @@ class TasksAdapter(
         private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         private val cbDone: CheckBox = itemView.findViewById(R.id.cbDone)
 
+        private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+
         fun bind(task: Task) {
             tvTitle.text = task.title
+            tvCategory.text = task.category
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(itemView.context)
             val font = prefs.getString("pref_font", "medium")

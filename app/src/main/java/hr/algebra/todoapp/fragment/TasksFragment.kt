@@ -140,6 +140,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             val dueIx = it.getColumnIndexOrThrow(Task::dueDate.name)
             val doneIx = it.getColumnIndexOrThrow(Task::done.name)
             val prIx = it.getColumnIndexOrThrow(Task::priority.name)
+            val catIx = it.getColumnIndexOrThrow(Task::category.name)
 
             while (it.moveToNext()) {
                 tasks.add(
@@ -149,11 +150,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                         notes = it.getString(notesIx),
                         dueDate = it.getLong(dueIx),
                         done = it.getInt(doneIx) == 1,
-                        priority = it.getInt(prIx)
+                        priority = it.getInt(prIx),
+                        category = it.getString(catIx)
                     )
                 )
             }
         }
+
         val filtered = when (filter) {
             TasksFilter.ALL -> tasks
             TasksFilter.ACTIVE -> tasks.filter { !it.done }
@@ -171,8 +174,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         adapter.submitList(sorted)
 
 
-        tvEmpty.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
-        rvTasks.visibility = if (tasks.isEmpty()) View.GONE else View.VISIBLE
+        tvEmpty.visibility = if (sorted.isEmpty()) View.VISIBLE else View.GONE
+        rvTasks.visibility = if (sorted.isEmpty()) View.GONE else View.VISIBLE
+
 
     }
 }
