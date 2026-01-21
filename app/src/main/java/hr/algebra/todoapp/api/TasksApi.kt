@@ -13,6 +13,12 @@ interface NasaApi {
 }
  */
 
+/*https://gist.githubusercontent.com/pale818/caab10f29fbae5ea670dfb70da482e7e/raw/a0268a0dedb1b9fbcb53e7d606e86bb42fc2c14a/tasks.json
+baseURL: https://gist.githubusercontent.com/pale818/caab10f29fbae5ea670dfb70da482e7e/raw/a0268a0dedb1b9fbcb53e7d606e86bb42fc2c14a/
+GET: "tasks.json"
+
+*/
+
 const val API_URL = "https://api.jsonbin.io/v3/b/"
 
 interface TasksApi {

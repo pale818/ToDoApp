@@ -22,4 +22,9 @@
         android:id="@+id/action_test_receiver"
         android:title="Test receiver" />
 
+    <item
+        android:id="@+id/action_download_tasks"
+        android:title="Download tasks" />
+
+
 </menu>

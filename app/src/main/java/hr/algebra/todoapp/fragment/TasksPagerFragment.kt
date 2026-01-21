@@ -14,14 +14,24 @@ import hr.algebra.todoapp.AddEditTaskActivity
 import hr.algebra.todoapp.TODO_PROVIDER_CONTENT_URI
 import android.app.AlertDialog
 import android.util.Log
+import android.widget.Toast
+import androidx.work.WorkManager
 import hr.algebra.todoapp.SettingsActivity
 import hr.algebra.todoapp.TasksReceiver
+import hr.algebra.todoapp.databinding.ActivitySplashScreenBinding
+import hr.algebra.todoapp.download.DownloadTasks
+import hr.algebra.todoapp.download.DownloadTasksWorker
+import hr.algebra.todoapp.framework.amOnline
+import hr.algebra.todoapp.framework.amOnline
+import hr.algebra.todoapp.framework.callDelayed
 
 enum class TasksFilter { ALL, ACTIVE, DONE }
 
 class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
 
     private var sortMode = 0 // 0 = newest, 1 = title
+
+    private lateinit var binding: ActivitySplashScreenBinding
 
     private fun notifyTabsToRefresh() {
         val current = childFragmentManager.fragments
@@ -106,6 +116,35 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
                     putExtra("TEXT", "Alarm fired → receiver ran.")
                 }
                 requireContext().sendBroadcast(i)
+                true
+            }
+            R.id.action_download_tasks -> {
+                if(requireContext().amOnline()) {
+                    val id = DownloadTasks.enqueue(requireContext())
+
+                    WorkManager.getInstance(requireContext())
+                        .getWorkInfoByIdLiveData(id)
+                        .observe(viewLifecycleOwner) { info ->
+                            Log.d(
+                                "paola: TaskPagerFragment",
+                                "isFinished ${info?.state?.isFinished}"
+                            )
+                            if (info != null && info.state.isFinished) {
+
+                                // 1) guaranteed immediate refresh (no broadcast timing issues)
+                                notifyAllTabsReload()
+
+                                // 2) keep broadcast to satisfy LO5 "IPC"
+                                requireContext().sendBroadcast(
+                                    Intent(DownloadTasksWorker.ACTION_DOWNLOAD_FINISHED)
+                                        .setPackage(requireContext().packageName)
+                                )
+                            }
+                        }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+                }
+
                 true
             }
 

@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import hr.algebra.todoapp.api.SyncTasksWorker
+//import hr.algebra.todoapp.api.SyncTasksWorker
 import hr.algebra.todoapp.databinding.ActivitySplashScreenBinding
 import hr.algebra.todoapp.framework.amOnline
 import hr.algebra.todoapp.framework.applyAnimation
@@ -27,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         startAnimations()
-        redirect()
+        //redirect()
 
 
     }
@@ -36,10 +36,11 @@ class SplashScreenActivity : AppCompatActivity() {
 
         binding.tvSplash.applyAnimation(R.anim.blink)
         binding.ivSplash.applyAnimation(R.anim.rotate)
+        callDelayed(DELAY) { startActivity(Intent(this, HostActivity::class.java)) }
 
     }
 
-    private fun redirect() {
+   /* private fun redirect() {
 
         if(getBooleanPreference(DATA_IMPORTED)) {
             callDelayed(DELAY) { startActivity(Intent(this, HostActivity::class.java)) }
@@ -59,6 +60,6 @@ class SplashScreenActivity : AppCompatActivity() {
                 callDelayed(DELAY) { finish() }
             }
         }
-    }
+    }*/
 }
 

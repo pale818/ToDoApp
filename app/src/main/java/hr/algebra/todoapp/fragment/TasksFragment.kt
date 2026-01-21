@@ -36,8 +36,17 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     private lateinit var adapter: TasksAdapter
 
     private lateinit var tvEmpty: View
-
     private var sortMode = 0
+
+
+    private val downloadUiReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.d("paola: TaskFragment", "intent ${intent}")
+
+            loadTasks() // immediate refresh
+        }
+    }
+
 
     fun setSortMode(mode: Int) {
         sortMode = mode
@@ -83,11 +92,22 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             filter,
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+        //FOR DOWNLOAD
+        val downloadFilter = IntentFilter(hr.algebra.todoapp.download.DownloadTasksWorker.ACTION_DOWNLOAD_FINISHED)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            downloadUiReceiver,
+            downloadFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
     }
     override fun onStop() {
         requireContext().unregisterReceiver(reminderUiReceiver)
+        requireContext().unregisterReceiver(downloadUiReceiver)
         super.onStop()
     }
+
 
 
     override fun onResume() {
