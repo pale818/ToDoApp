@@ -15,7 +15,7 @@ import kotlin.coroutines.coroutineContext
 private const val DB_NAME = "tasks.db"
 
 // INCREASE IN ORDER TO GO INSIDE THE FUNCTION onUpgrade
-private const val DB_VERSION = 6
+private const val DB_VERSION = 7
 private const val TABLE_NAME = "tasks"
 private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::_id.name} integer primary key autoincrement, " +

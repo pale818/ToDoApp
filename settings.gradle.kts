@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Nasa"
+rootProject.name = "ToDo"
 include(":app")

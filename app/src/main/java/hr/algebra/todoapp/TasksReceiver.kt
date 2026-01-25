@@ -24,17 +24,20 @@ class TasksReceiver : BroadcastReceiver() {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         ensureChannel(nm)
 
-        val openAppIntent = Intent(context, HostActivity::class.java).apply {
+
+        val openTaskIntent = Intent(context, AddEditTaskActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("TASK_ID", taskId) // optional: open edit/details
+            putExtra(AddEditTaskActivity.EXTRA_TASK_ID, taskId)
         }
+
 
         val contentPi = PendingIntent.getActivity(
             context,
             taskId.toInt().coerceAtLeast(0),
-            openAppIntent,
+            openTaskIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
 
         val notif = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground) // change if you don't have it

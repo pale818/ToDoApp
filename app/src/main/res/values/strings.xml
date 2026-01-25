@@ -4,7 +4,8 @@
     <string name="no_internet">No internet</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="notification_app">Notification Application</string>
+    <string name="notification_app">Simple Task App - This app helps you organize your daily tasks in one place.
+You can add, edit, and categorize tasks, set reminders, and keep track of what’s done and what still needs attention. </string>
     <string name="tasks">Tasks</string>
     <string name="about">About</string>
     <string name="exit">Exit</string>

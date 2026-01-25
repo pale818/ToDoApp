@@ -139,7 +139,6 @@ class AddEditTaskActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.insert_failed), Toast.LENGTH_SHORT).show()
                     return
                 }
-
                 // Schedule reminder for new task
                 if (notificationsEnabled() && !isDone && dueAtMillis != null && dueAtMillis > System.currentTimeMillis()) {
                     TaskReminderScheduler.schedule(this, newId, title, dueAtMillis)

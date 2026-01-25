@@ -7,19 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".fragment.AboutFragment">
 
-    <ImageView
-        android:src="@drawable/flat_about"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="top|center"
+        android:gravity="center|center"
         android:text="@string/notification_app"
-        android:textSize="@dimen/text_title" />
+        android:textSize="25dp" />
 
 
 </LinearLayout>

@@ -11,9 +11,9 @@
 
     <ImageView
         android:id="@+id/ivSplash"
-        android:src="@drawable/flat_earth"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_400dp" />
+        android:layout_height="318dp"
+        android:src="@drawable/todo" />
 
     <TextView
         android:layout_gravity="center"
