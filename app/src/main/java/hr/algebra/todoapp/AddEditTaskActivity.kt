@@ -147,7 +147,7 @@ class AddEditTaskActivity : AppCompatActivity() {
             } else {
                 val id = taskId!!
 
-                // Cancel previous reminder (safe even if none existed)
+                // Cancel previous reminder
                 TaskReminderScheduler.cancel(this, id)
 
                 val uri = ContentUris.withAppendedId(TODO_PROVIDER_CONTENT_URI, id)

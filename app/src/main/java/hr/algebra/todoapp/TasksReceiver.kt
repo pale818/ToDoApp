@@ -14,7 +14,6 @@ import hr.algebra.todoapp.framework.notificationsEnabled
 class TasksReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        // Respect preference FIRST
         if (!context.notificationsEnabled()) return
 
         val taskId = intent.getLongExtra("TASK_ID", -1L)
@@ -54,7 +53,6 @@ class TasksReceiver : BroadcastReceiver() {
         //BROADCAST
         if (taskId != 999L) return
         Log.d("TasksReceiver", "Alarm/trigger fired for taskId=$taskId")
-        // Notify UI (your TasksFragment listens for this)
         context.sendBroadcast(Intent(ACTION_REMINDER_FIRED).apply {
             putExtra(EXTRA_TASK_ID, taskId)
         })

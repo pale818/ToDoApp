@@ -168,11 +168,25 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     }
 
     private fun loadTasks() {
+        val sortOrder = when (sortMode) {
+            1 -> "${Task::priority.name} ASC, ${Task::dueDate.name} ASC" // priority 1 first
+            else -> "${Task::_id.name} DESC"
+        }
+
         val cursor = requireContext().contentResolver.query(
+            TODO_PROVIDER_CONTENT_URI,
+            null,
+            null,
+            null,
+            sortOrder
+        ) ?: return
+
+
+        /*val cursor = requireContext().contentResolver.query(
             TODO_PROVIDER_CONTENT_URI,
             null, null, null,
             "${Task::dueDate.name} ASC"
-        ) ?: return
+        ) ?: return*/
 
         val tasks = mutableListOf<Task>()
         cursor.use {
@@ -204,7 +218,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             TasksFilter.ACTIVE -> tasks.filter { !it.done }
             TasksFilter.DONE -> tasks.filter { it.done }
         }
-
+/*
         val sort = requireContext().prefSort()
 
         Toast.makeText(requireContext(), "sort: ${sort}", Toast.LENGTH_SHORT).show()
@@ -218,6 +232,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
         tvEmpty.visibility = if (sorted.isEmpty()) View.VISIBLE else View.GONE
         rvTasks.visibility = if (sorted.isEmpty()) View.GONE else View.VISIBLE
+*/
+
+
+        adapter.submitList(filtered)
+
+        tvEmpty.visibility = if (filtered.isEmpty()) View.VISIBLE else View.GONE
+        rvTasks.visibility = if (filtered.isEmpty()) View.GONE else View.VISIBLE
 
 
     }
@@ -232,7 +253,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
             Toast.makeText(requireContext(), "Reminder fired (taskId=$id). Refreshing…", Toast.LENGTH_SHORT).show()
 
-            // Handler/Looper demo: delayed refresh
             mainHandler.postDelayed({
                 loadTasks()
                 Toast.makeText(requireContext(), "Refreshed after delay", Toast.LENGTH_SHORT).show()

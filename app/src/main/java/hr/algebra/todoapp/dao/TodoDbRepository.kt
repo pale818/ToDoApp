@@ -15,7 +15,7 @@ import kotlin.coroutines.coroutineContext
 private const val DB_NAME = "tasks.db"
 
 // INCREASE IN ORDER TO GO INSIDE THE FUNCTION onUpgrade
-private const val DB_VERSION = 7
+private const val DB_VERSION = 8
 private const val TABLE_NAME = "tasks"
 private val CREATE_TABLE = "create table $TABLE_NAME( " +
         "${Task::_id.name} integer primary key autoincrement, " +
@@ -112,7 +112,7 @@ class TodoDbRepository(context: Context?) :
         Log.e("paola: DB_UPGRADE", "onUpgrade $oldVersion -> $newVersion")
 
         // MIGRATION
-        // 1) add category
+        // add category
         logColumns(db)
         if (oldVersion < DB_VERSION) {
             db.execSQL(
@@ -121,7 +121,7 @@ class TodoDbRepository(context: Context?) :
         }
         logColumns(db)
 
-        // 2) return to original table(remove category),data loss
+        // return to original table(remove category),data loss
         /*
         logColumns(db)
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")

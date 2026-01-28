@@ -29,7 +29,7 @@ enum class TasksFilter { ALL, ACTIVE, DONE }
 
 class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
 
-    private var sortMode = 0 // 0 = newest, 1 = title
+    private var sortMode = 1 // 0 = newest, 1 = title
 
     private lateinit var binding: ActivitySplashScreenBinding
 
@@ -41,7 +41,6 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
 
     private val settingsLauncher =
         registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) {
-            // force visible list to rebind items so font size is reapplied
             childFragmentManager.fragments
                 .filterIsInstance<TasksFragment>()
                 .forEach { it.refreshListUI() }
@@ -93,7 +92,7 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
                 true
             }
             R.id.action_sort -> {
-                // We'll implement in step 3 below
+
                 sortMode = (sortMode + 1) % 2
                 notifyTabsToRefresh()
                 true
@@ -131,10 +130,8 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
                             )
                             if (info != null && info.state.isFinished) {
 
-                                // 1) guaranteed immediate refresh (no broadcast timing issues)
                                 notifyAllTabsReload()
 
-                                // 2) keep broadcast to satisfy LO5 "IPC"
                                 requireContext().sendBroadcast(
                                     Intent(DownloadTasksWorker.ACTION_DOWNLOAD_FINISHED)
                                         .setPackage(requireContext().packageName)
@@ -165,12 +162,11 @@ class TasksPagerFragment : Fragment(R.layout.fragment_tasks_pager) {
             .setMessage("All completed tasks will be removed.")
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Clear") { _, _ ->
-                clearCompleted()  // <- your existing clear completed logic
+                clearCompleted()
             }
             .show()
     }
     private fun clearCompleted() {
-        // easiest: launch an intent/dialog later; for now just run delete logic
         val ctx = requireContext().applicationContext
         ctx.contentResolver.delete(
             TODO_PROVIDER_CONTENT_URI,
